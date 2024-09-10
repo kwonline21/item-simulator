@@ -12,3 +12,48 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
+model Users {
+  userId Int @id @default(autoincrement()) @map("userId")
+  id String @unique @map("id")
+  password String @map("password")
+  name String @map("name")
+  createdAt DateTime @default(now()) @map("createdAt")
+  updatedAt DateTime @updatedAt @map("updatedAt")
+
+  characters Characters[]
+
+  @@map("Users")
+}
+
+model Characters {
+  characterId Int @id @default(autoincrement()) @map("characterId")
+  userId Int @map("userId")
+  nickname String @unique @map("nickname")
+  health Int @default(500) @map("health")
+  power Int @default(100) @map("power")
+  createdAt DateTime @default(now()) @map("createdAt")
+  updatedAt DateTime @updatedAt @map("updatedAt")
+
+  user Users @relation(fields: [userId], references: [userId], onDelete: Cascade)
+
+  @@map("Characters")
+}
+
+model Items {
+  itemId Int @id @default(autoincrement()) @map("itemId")
+
+  @@map("Items")
+}
+
+model Inventorys {
+  inventoryId Int @id @default(autoincrement()) @map("inventoryId")
+
+  @@map("Inventorys")
+}
+
+model Equipments {
+  equipmentId Int @id @default(autoincrement()) @map("equipmentId")
+
+  @@map("Equipments")
+}
