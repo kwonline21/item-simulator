@@ -50,7 +50,7 @@ router.get('/items', async (req, res, next) => {
     },
   });
 
-  return res.status(200).json({ data: items });
+  return res.status(201).json({ data: items });
 });
 
 // 아이템 상세 조회 API
