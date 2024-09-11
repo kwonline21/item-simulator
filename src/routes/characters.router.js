@@ -4,6 +4,7 @@ import authMiddleware from '../middlewares/auth.middleware.js';
 
 const router = express.Router();
 
+// 캐릭터 생성 API
 router.post('/characters', authMiddleware, async (req, res, next) => {
   const { nickname } = req.body;
   const { userId } = req.user;
@@ -24,5 +25,28 @@ router.post('/characters', authMiddleware, async (req, res, next) => {
 
   return res.status(201).json({ data: character.characterId });
 });
+
+// 캐릭터 삭제 API
+router.delete(
+  '/characters/:characterId',
+  authMiddleware,
+  async (req, res, next) => {
+    const { characterId } = req.params;
+
+    const character = await prisma.characters.findUnique({
+      where: {
+        characterId: +characterId,
+      },
+    });
+
+    if (!character) {
+      return res.status(404).json({ message: '캐릭터가 존재하지 않습니다.' });
+    }
+
+    await prisma.characters.delete({ where: { characterId: +characterId } });
+
+    return res.status(200).json({ message: '캐릭터가 삭제되었습니다.' });
+  }
+);
 
 export default router;
