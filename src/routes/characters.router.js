@@ -49,4 +49,32 @@ router.delete(
   }
 );
 
+// 캐릭터 상세 조회 API
+router.get(
+  '/characters/:characterId',
+  authMiddleware,
+  async (req, res, next) => {
+    const { characterId } = req.params;
+    const { userId } = req.user;
+
+    const character = await prisma.characters.findFirst({
+      where: { characterId: +characterId },
+      select: {
+        userId: true,
+        nickname: true,
+        health: true,
+        power: true,
+        money: true,
+      },
+    });
+
+    // 요청한 사람이 캐릭터의 소유자가 아닐 경우
+    if (userId !== character.userId) {
+      delete character.money;
+    }
+
+    return res.status(200).json({ data: character });
+  }
+);
+
 export default router;
