@@ -32,6 +32,7 @@ model Characters {
   nickname String @unique @map("nickname")
   health Int @default(500) @map("health")
   power Int @default(100) @map("power")
+  money Int @default(10000) @map("money")
   createdAt DateTime @default(now()) @map("createdAt")
   updatedAt DateTime @updatedAt @map("updatedAt")
 
